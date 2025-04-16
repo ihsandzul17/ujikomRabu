@@ -1,0 +1,1 @@
+<?php /**PATH C:\ukk-pengaduan\resources\views\layouts\main.blade.php ENDPATH**/ ?>
