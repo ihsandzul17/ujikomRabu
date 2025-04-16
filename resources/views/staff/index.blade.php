@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengaduan Masyarakat</title>
     <link rel="icon" type="images/png" href="images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
         }
+
         .navbar {
-            background: linear-gradient(45deg,rgb(204, 0, 0),rgb(74, 0, 194));
+            background: linear-gradient(45deg, rgb(204, 0, 0), rgb(74, 0, 194));
             padding: 15px 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
@@ -38,8 +41,9 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
-    @if(auth()->user()->role !== 'staff')
+    @if (auth()->user()->role !== 'staff')
         <script>
             window.location.href = "{{ url('/errors/404') }}";
         </script>
@@ -68,33 +72,81 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Pelapor</th>
-                        <th>Lokasi & Tanggal</th>
+                        <th>
+                            <a href="{{ request()->fullUrlWithQuery([
+                                'sort' => 'created_at',
+                                'direction' => ($sortField == 'created_at' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ]) }}" class="text-decoration-none text-dark">
+                                Lokasi & Tanggal
+                                @if($sortField == 'created_at')
+                                    <i class="bi bi-chevron-{{ $sortDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                @endif
+                            </a>
+                        </th>
                         <th>Deskripsi</th>
-                        <th>Jumlah Vote</th>
-                        <th>Jumlah View</th>
+                        <th>
+                            <a href="{{ request()->fullUrlWithQuery([
+                                'sort' => 'votes',
+                                'direction' => ($sortField == 'votes' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ]) }}" class="text-decoration-none text-dark">
+                                Jumlah Vote
+                                @if($sortField == 'votes')
+                                    <i class="bi bi-chevron-{{ $sortDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                @endif
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ request()->fullUrlWithQuery([
+                                'sort' => 'views',
+                                'direction' => ($sortField == 'views' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ]) }}" class="text-decoration-none text-dark">
+                                Jumlah View
+                                @if($sortField == 'views')
+                                    <i class="bi bi-chevron-{{ $sortDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                @endif
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ request()->fullUrlWithQuery([
+                                'sort' => 'status',
+                                'direction' => ($sortField == 'status' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ]) }}" class="text-decoration-none text-dark">
+                                Status
+                                @if($sortField == 'status')
+                                    <i class="bi bi-chevron-{{ $sortDirection == 'asc' ? 'up' : 'down' }}"></i>
+                                @endif
+                            </a>
+                        </th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($pengaduan as $p)
-                        @if($p->relationLoaded('user'))
+                    @foreach ($pengaduan as $p)
+                        @if ($p->relationLoaded('user'))
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    @if($p->user && $p->user->image)
-                                        <img src="{{ asset('storage/' . $p->user->image) }}" alt="Profile Image" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                    @if ($p->user && $p->user->image)
+                                        <img src="{{ asset('storage/' . $p->user->image) }}" alt="Profile Image"
+                                            class="img-thumbnail" style="width: 50px; height: 50px;">
                                     @else
-                                        <img src="{{ asset('images/default-profile.png') }}" alt="Default Profile Image" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                        <img src="{{ asset('images/default-profile.png') }}" alt="Default Profile Image"
+                                            class="img-thumbnail" style="width: 50px; height: 50px;">
                                     @endif
                                     {{ $p->user->name ?? 'Unknown User' }}
                                 </td>
                                 <td>
-                                    {{ implode(', ', array_filter([
-                                        $p->province->name ?? null, 
-                                        $p->city->name ?? null, 
-                                        $p->district->name ?? null, 
-                                        $p->village->name ?? null
-                                    ])) }}
+                                    {{ implode(
+                                        ', ',
+                                        array_filter([
+                                            $p->province->name ?? null,
+                                            $p->city->name ?? null,
+                                            $p->district->name ?? null,
+                                            $p->village->name ?? null,
+                                        ]),
+                                    ) }}
                                     <br>
                                     {{ $p->created_at->format('d M Y') }}
                                 </td>
@@ -102,13 +154,27 @@
                                 <td>{{ $p->votes }}</td>
                                 <td>{{ $p->views }}</td>
                                 <td>
-                                    <a href="{{ route('staff.show', $p->id) }}" class="btn btn-primary detail-btn" data-id="{{ $p->id }}">Selengkapnya</a>
+                                    <span class="badge
+                                        {{ $p->status == 'pending' ? 'bg-warning' :
+                                           ($p->status == 'done' ? 'bg-success' :
+                                           ($p->status == 'in_progress' ? 'bg-primary' : 'bg-danger')) }}">
+                                        {{ $p->status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('staff.show', $p->id) }}" class="btn btn-primary detail-btn"
+                                        data-id="{{ $p->id }}">Selengkapnya</a>
                                 </td>
                             </tr>
                         @endif
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-3">
+            {{ $pengaduan->appends(request()->query())->links() }}
         </div>
 
         <!-- Modal for Export Options -->
@@ -172,7 +238,7 @@
             });
 
             // SweetAlert untuk notifikasi login success
-            @if(session('login_success'))
+            @if (session('login_success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -180,5 +246,6 @@
                 });
             @endif
         </script>
-    </body>
+</body>
+
 </html>

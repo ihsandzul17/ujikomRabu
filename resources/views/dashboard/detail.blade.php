@@ -75,7 +75,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/dashboard">Pengaduan Masyarakat</a>
             <h6>Selamat Datang, {{ auth()->user()->name }}</h6>
-            <img src="{{ auth()->user()->image ? asset('storage/' . auth()->user()->image) : 'https://via.placeholder.com/400' }}" alt="Foto Profil">
+            <img src="{{ auth()->user()->image ? asset('storage/public/' . auth()->user()->image) : 'https://via.placeholder.com/400' }}" alt="Foto Profil">
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline ms-2"> <!-- Added ms-2 class for margin -->
                 @csrf
             </form>
@@ -86,14 +86,14 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>{{ $pengaduan->nama }}</h1>
-                <img src="{{ $pengaduan->gambar ? asset('storage/' . $pengaduan->gambar) : 'https://via.placeholder.com/400' }}" alt="{{ $pengaduan->nama }}" class="detail-image">
+                <img src="{{ $pengaduan->gambar ? asset('storage/public/' . $pengaduan->gambar) : 'https://via.placeholder.com/400' }}" alt="{{ $pengaduan->nama }}" class="detail-image">
                 <p>{{ $pengaduan->deskripsi }}</p>
                 <p>Tipe: {{ $pengaduan->type }}</p>
                 <p>Lokasi:
                     {{ implode(', ', array_filter([
-                        $pengaduan->province->name ?? null, 
-                        $pengaduan->city->name ?? null, 
-                        $pengaduan->district->name ?? null, 
+                        $pengaduan->province->name ?? null,
+                        $pengaduan->city->name ?? null,
+                        $pengaduan->district->name ?? null,
                         $pengaduan->village->name ?? null
                     ])) }}
                 </p>

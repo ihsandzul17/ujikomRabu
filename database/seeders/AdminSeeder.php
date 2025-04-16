@@ -16,6 +16,6 @@ class AdminSeeder extends Seeder
             'password' => Hash::make('1234567890'),
             'no_hp' => '081234567890',
             'role' => 'admin'
-        ]);
+            ]);
     }
 }

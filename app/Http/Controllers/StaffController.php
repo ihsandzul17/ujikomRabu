@@ -13,14 +13,27 @@ use Carbon\Carbon;
 
 class StaffController extends Controller
 {
-    public function index()
-    {
-        // Fetch the pengaduan data
-        $pengaduan = Pengaduan::with(['user', 'province', 'city', 'district', 'village'])->get();
+    // Di controller (misal PengaduanController.php)
+public function index(Request $request)
+{
+    $query = Pengaduan::with(['user', 'province', 'city', 'district', 'village']);
 
-        // Pass the data to the view
-        return view('staff.index', compact('pengaduan'));
+    // Sorting logic
+    $sortField = $request->get('sort', 'created_at');
+    $sortDirection = $request->get('direction', 'desc');
+
+    // Validasi field yang boleh di-sort
+    $allowedSorts = ['created_at', 'votes', 'views', 'status'];
+    if (!in_array($sortField, $allowedSorts)) {
+        $sortField = 'created_at';
     }
+
+    $query->orderBy($sortField, $sortDirection);
+
+    $pengaduan = $query->paginate(50);
+
+    return view('staff.index', compact('pengaduan', 'sortField', 'sortDirection'));
+}
 
     public function store(Request $request)
     {
@@ -49,7 +62,7 @@ class StaffController extends Controller
         return redirect()->route('admin.detail-staff')->with('success', 'Berhasil Membuat Staff!');
     }
 
- 
+
 
     public function destroy($id)
     {
@@ -58,6 +71,7 @@ class StaffController extends Controller
 
         return redirect()->route('admin.detail-staff')->with('success', 'Staff berhasil dihapus.');
     }
+
 
     public function exportToExcel(Request $request)
 {
@@ -70,7 +84,7 @@ class StaffController extends Controller
 
     return Excel::download(new PengaduanExport(), 'pengaduan.xlsx');
 }
-    
+
 
     public function show($id)
 

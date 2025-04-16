@@ -47,7 +47,7 @@ Route::get('/villages/{district_id}', [VillageController::class, 'getVillagesByD
 // Admin
 Route::get('/admin', [AdminController::class, 'index'])->name('admin')->middleware('auth');
 Route::get('/admin/index', [AdminController::class, 'index'])->middleware('admin');
-Route::get('/admin/detail-staff', [AdminController::class, 'detailStaff'])->name('admin.detail-staff');
+Route::get('/admin/detail-staff', [AdminController::class, 'detailAkun'])->name('admin.detail-staff');
 Route::post('/admin/detail-staff', [StaffController::class, 'store'])->name('staff.store');
 Route::delete('/admin/detail-staff/{id}', [StaffController::class, 'destroy'])->name('staff.destroy');
 

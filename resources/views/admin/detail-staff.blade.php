@@ -15,9 +15,14 @@
         }
 
         .navbar {
-            background: linear-gradient(45deg, rgb(204, 0, 0), rgb(74, 0, 194));
+            background: linear-gradient(45deg,rgb(204, 0, 0),rgb(74, 0, 194));
             padding: 15px 20px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 220px; /* Sesuaikan dengan lebar sidebar */
+            right: 0;
+            z-index: 1000;
         }
 
         .navbar-brand {
@@ -39,13 +44,15 @@
         }
 
         .sidebar {
-            height: 100vh;
             background-color: #343a40;
-            padding: 15px;
+            padding: 20px;
             position: fixed;
             top: 0;
             left: 0;
-            width: 200px;
+            width: 220px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
         .sidebar a {
@@ -74,7 +81,7 @@
     </script>
     @endif
     <div class="sidebar">
-        <a href="/admin">Dashboard</a>
+        <a href="{{ url('/admin') }}">Dashboard</a>
         <a href="{{ url('/admin/detail-staff') }}" class="active">Kelola Akun</a>
     </div>
     <div class="content">
@@ -90,8 +97,8 @@
                 </div>
             </div>
         </nav>
-        <div class="container mt-5">
-            <h1>Daftar Staff</h1>
+        <div class="container" style="margin-top: 80px">
+            <h1>Daftar Akun</h1>
             <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStaffModal">
                 Tambah Staff
             </button>
@@ -112,7 +119,7 @@
                             <form action="{{ route('staff.destroy', $staff->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                     </tr>

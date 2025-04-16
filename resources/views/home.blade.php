@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: url('/images/bc-landing.jpg') no-repeat center center fixed;
+            background: url('/images/bg-landing2.png') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             margin: 0;
@@ -37,17 +37,6 @@
             font-size: 1.2rem;
             padding: 10px 30px;
             border-radius: 5px;
-        }
-
-        .chart-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        canvas {
-            border: 1px solid #ddd;
         }
 
         footer {
@@ -87,14 +76,14 @@
         </div>
     </div>
 
-    <section class="py-5 bg-dark bg-opacity-75 text-white">
+    <section class="py-5 bg-light bg-opacity-20 text-black">
         <div class="container text-center">
             <h2 class="mb-4">Statistik Pengaduan</h2>
             <div class="row justify-content-center">
                 <div class="col-md-6 mb-4">
                     <canvas id="barChart" height="200"></canvas>
                 </div>
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <canvas id="pieChart" height="200"></canvas>
                 </div>
             </div>
@@ -165,7 +154,7 @@
 
 
     <!-- Footer -->
-    <footer>
+    <footer class="bg-dark text-white text-center py-2">
         &copy; {{ date('Y') }} Website Pengaduan Masyarakat. All rights reserved.
     </footer>
 

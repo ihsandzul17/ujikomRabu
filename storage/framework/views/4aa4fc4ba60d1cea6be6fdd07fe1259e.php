@@ -75,7 +75,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/dashboard">Pengaduan Masyarakat</a>
             <h6>Selamat Datang, <?php echo e(auth()->user()->name); ?></h6>
-            <img src="<?php echo e(auth()->user()->image ? asset('storage/' . auth()->user()->image) : 'https://via.placeholder.com/400'); ?>" alt="Foto Profil">
+            <img src="<?php echo e(auth()->user()->image ? asset('storage/public/' . auth()->user()->image) : 'https://via.placeholder.com/400'); ?>" alt="Foto Profil">
             <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-inline ms-2"> <!-- Added ms-2 class for margin -->
                 <?php echo csrf_field(); ?>
             </form>
@@ -86,14 +86,14 @@
         <div class="row">
             <div class="col-md-12">
                 <h1><?php echo e($pengaduan->nama); ?></h1>
-                <img src="<?php echo e($pengaduan->gambar ? asset('storage/' . $pengaduan->gambar) : 'https://via.placeholder.com/400'); ?>" alt="<?php echo e($pengaduan->nama); ?>" class="detail-image">
+                <img src="<?php echo e($pengaduan->gambar ? asset('storage/public/' . $pengaduan->gambar) : 'https://via.placeholder.com/400'); ?>" alt="<?php echo e($pengaduan->nama); ?>" class="detail-image">
                 <p><?php echo e($pengaduan->deskripsi); ?></p>
                 <p>Tipe: <?php echo e($pengaduan->type); ?></p>
                 <p>Lokasi:
                     <?php echo e(implode(', ', array_filter([
-                        $pengaduan->province->name ?? null, 
-                        $pengaduan->city->name ?? null, 
-                        $pengaduan->district->name ?? null, 
+                        $pengaduan->province->name ?? null,
+                        $pengaduan->city->name ?? null,
+                        $pengaduan->district->name ?? null,
                         $pengaduan->village->name ?? null
                     ]))); ?>
 
@@ -106,4 +106,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html><?php /**PATH C:\ukk-pengaduan\resources\views\dashboard\detail.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH C:\ukk-pengaduan\resources\views\dashboard\detail.blade.php ENDPATH**/ ?>

@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengaduan Masyarakat</title>
     <link rel="icon" type="images/png" href="images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
         }
+
         .navbar {
-            background: linear-gradient(45deg,rgb(204, 0, 0),rgb(74, 0, 194));
+            background: linear-gradient(45deg, rgb(204, 0, 0), rgb(74, 0, 194));
             padding: 15px 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
@@ -38,6 +41,7 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <?php if(auth()->user()->role !== 'staff'): ?>
         <script>
@@ -68,11 +72,53 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Pelapor</th>
-                        <th>Lokasi & Tanggal</th>
+                        <th>
+                            <a href="<?php echo e(request()->fullUrlWithQuery([
+                                'sort' => 'created_at',
+                                'direction' => ($sortField == 'created_at' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ])); ?>" class="text-decoration-none text-dark">
+                                Lokasi & Tanggal
+                                <?php if($sortField == 'created_at'): ?>
+                                    <i class="bi bi-chevron-<?php echo e($sortDirection == 'asc' ? 'up' : 'down'); ?>"></i>
+                                <?php endif; ?>
+                            </a>
+                        </th>
                         <th>Deskripsi</th>
-                        <th>Jumlah Vote</th>
-                        <th>Jumlah View</th>
+                        <th>
+                            <a href="<?php echo e(request()->fullUrlWithQuery([
+                                'sort' => 'votes',
+                                'direction' => ($sortField == 'votes' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ])); ?>" class="text-decoration-none text-dark">
+                                Jumlah Vote
+                                <?php if($sortField == 'votes'): ?>
+                                    <i class="bi bi-chevron-<?php echo e($sortDirection == 'asc' ? 'up' : 'down'); ?>"></i>
+                                <?php endif; ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo e(request()->fullUrlWithQuery([
+                                'sort' => 'views',
+                                'direction' => ($sortField == 'views' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ])); ?>" class="text-decoration-none text-dark">
+                                Jumlah View
+                                <?php if($sortField == 'views'): ?>
+                                    <i class="bi bi-chevron-<?php echo e($sortDirection == 'asc' ? 'up' : 'down'); ?>"></i>
+                                <?php endif; ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo e(request()->fullUrlWithQuery([
+                                'sort' => 'status',
+                                'direction' => ($sortField == 'status' && $sortDirection == 'asc') ? 'desc' : 'asc'
+                            ])); ?>" class="text-decoration-none text-dark">
+                                Status
+                                <?php if($sortField == 'status'): ?>
+                                    <i class="bi bi-chevron-<?php echo e($sortDirection == 'asc' ? 'up' : 'down'); ?>"></i>
+                                <?php endif; ?>
+                            </a>
+                        </th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -80,22 +126,28 @@
                     <?php $__currentLoopData = $pengaduan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php if($p->relationLoaded('user')): ?>
                             <tr>
+                                <td><?php echo e($loop->iteration); ?></td>
                                 <td>
                                     <?php if($p->user && $p->user->image): ?>
-                                        <img src="<?php echo e(asset('storage/' . $p->user->image)); ?>" alt="Profile Image" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                        <img src="<?php echo e(asset('storage/' . $p->user->image)); ?>" alt="Profile Image"
+                                            class="img-thumbnail" style="width: 50px; height: 50px;">
                                     <?php else: ?>
-                                        <img src="<?php echo e(asset('images/default-profile.png')); ?>" alt="Default Profile Image" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                        <img src="<?php echo e(asset('images/default-profile.png')); ?>" alt="Default Profile Image"
+                                            class="img-thumbnail" style="width: 50px; height: 50px;">
                                     <?php endif; ?>
                                     <?php echo e($p->user->name ?? 'Unknown User'); ?>
 
                                 </td>
                                 <td>
-                                    <?php echo e(implode(', ', array_filter([
-                                        $p->province->name ?? null, 
-                                        $p->city->name ?? null, 
-                                        $p->district->name ?? null, 
-                                        $p->village->name ?? null
-                                    ]))); ?>
+                                    <?php echo e(implode(
+                                        ', ',
+                                        array_filter([
+                                            $p->province->name ?? null,
+                                            $p->city->name ?? null,
+                                            $p->district->name ?? null,
+                                            $p->village->name ?? null,
+                                        ]),
+                                    )); ?>
 
                                     <br>
                                     <?php echo e($p->created_at->format('d M Y')); ?>
@@ -105,13 +157,29 @@
                                 <td><?php echo e($p->votes); ?></td>
                                 <td><?php echo e($p->views); ?></td>
                                 <td>
-                                    <a href="<?php echo e(route('staff.show', $p->id)); ?>" class="btn btn-primary detail-btn" data-id="<?php echo e($p->id); ?>">Selengkapnya</a>
+                                    <span class="badge
+                                        <?php echo e($p->status == 'pending' ? 'bg-warning' :
+                                           ($p->status == 'done' ? 'bg-success' :
+                                           ($p->status == 'in_progress' ? 'bg-primary' : 'bg-danger'))); ?>">
+                                        <?php echo e($p->status); ?>
+
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="<?php echo e(route('staff.show', $p->id)); ?>" class="btn btn-primary detail-btn"
+                                        data-id="<?php echo e($p->id); ?>">Selengkapnya</a>
                                 </td>
                             </tr>
                         <?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-3">
+            <?php echo e($pengaduan->appends(request()->query())->links()); ?>
+
         </div>
 
         <!-- Modal for Export Options -->
@@ -183,6 +251,7 @@
                 });
             <?php endif; ?>
         </script>
-    </body>
+</body>
+
 </html>
 <?php /**PATH C:\ukk-pengaduan\resources\views\staff\index.blade.php ENDPATH**/ ?>

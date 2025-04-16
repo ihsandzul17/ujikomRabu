@@ -23,18 +23,17 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $request->session()->flash('login_success', 'Anda berhasil login!');
-            
+
             if (Auth::user()->isAdmin()) {
                 return redirect()->intended('/admin');
             }elseif (Auth::user()->isStaff()) {
                 return redirect()->intended('/staff');
             }
-
             return redirect()->intended('/dashboard');
         }
 
         return back()->with('loginError', 'Email atau password salah!');
     }
 
-  
+
 }
